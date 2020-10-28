@@ -40,7 +40,7 @@ library("wordcloud2")
 library("RColorBrewer")
 library(dygraphs)
 library(xts)   
-
+library(sqldf)
 
 
 
@@ -473,9 +473,12 @@ accumulate_by <- function(dat, var) {
 
 data5$year <- year(data5$period)
 data5$date <- decimal_date(data5$period)
-fig <- data5 %>% accumulate_by(~period)
+fig_data <- data5 %>% accumulate_by(~period)
 
-fig <- fig %>%
+fig_data=sqldf("Select * from fig_data group by frame,date,type order by frame,date,type")
+
+
+fig <- fig_data %>%
   plot_ly(
     x = ~date, 
     y = ~attendances,
